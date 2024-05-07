@@ -57,18 +57,18 @@
         }
         
         #restartButton {
-    position: absolute; /* Position the button relative to its containing block */
-    bottom: 20px; /* Adjust the distance from the bottom of the viewport */
-    left: 50%; /* Center the button horizontally */
-    transform: translateX(-50%); /* Center the button horizontally */
-    padding: 10px 20px;
-    background-color: purple;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: Sans-Serif;
-}
+            position: absolute; /* Position the button relative to its containing block */
+            bottom: 20px; /* Adjust the distance from the bottom of the viewport */
+            left: 50%; /* Center the button horizontally */
+            transform: translateX(-50%); /* Center the button horizontally */
+            padding: 10px 20px;
+            background-color: purple;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: Sans-Serif;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +79,7 @@
 </div>
 <canvas id="board"></canvas>
 <button id="restartButton" style="display: block;">Restart</button>
+<audio id="backgroundMusic" src="Eternxlkz - SLAY! (PHONK) (mp3cut.net).mp3" loop></audio>
 <script>
     // JavaScript code for the game...
 
@@ -141,22 +142,26 @@
 
         document.getElementById("playButton").addEventListener("click", function() {
             startGame();
+            playBackgroundMusic(); // Start background music when play button is clicked
         });
         
         document.getElementById("leaderboardButton").addEventListener("click", function() {
-        displayComingSoon();
+            displayComingSoon();
         });
         
         function displayComingSoon() {
-    alert("Coming soon! itna banane me phatt gyi hai leader board chaiye..");
-}
-
+            alert("Coming soon! itna banane me phatt gyi hai leader board chaiye..");
+        }
+        
         // Function to handle restart button click
         document.getElementById("restartButton").addEventListener("click", function() {
             restartGame();
-        });
+        document.getElementById("backgroundMusic").load(); // Reload the audio element
+        document.getElementById("backgroundMusic").play(); // Play the background music
+      });
     }
-
+         
+         
     function startGame() {
         document.getElementById("openingScene").style.display = "none";
         document.getElementById("board").style.display = "block";
@@ -214,6 +219,7 @@
 
         if (gameOver) {
             context.fillText("GAME KHATAM!", 17, 325);
+            pauseBackgroundMusic(); // Pause background music when game is over
         }
     }
 
@@ -245,6 +251,24 @@
         }
         pipeArray.push(bottomPipe);
     }
+    
+    let backgroundMusic = document.getElementById("backgroundMusic");
+
+    // Play the background music
+    function resumeBackgroundMusic() {
+        backgroundMusic.currentTime = 0; // Rewind to the beginning
+        backgroundMusic.play();
+    }
+    
+    function playBackgroundMusic() {
+        backgroundMusic.currentTime = 0; // Rewind to the beginning
+        backgroundMusic.play();
+    }
+
+    // Pause the background music
+    function pauseBackgroundMusic() {
+        backgroundMusic.pause();
+    }
 
     function moveBird(e) {
         if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX") {
@@ -262,10 +286,12 @@
     }
 
     function restartGame() {
+        console.log("Game restarted!");
         bird.y = birdY;
         pipeArray = [];
         score = 0;
         gameOver = false;
+        resumeBackgroundMusic(); // Resume background music when game restarts
     }
 
     function detectCollision(a, b) {
@@ -287,6 +313,7 @@
             a.y < b.y + b.height &&
             a.y + a.height > b.y;
     }
+
 </script>
 </body>
 </html>
